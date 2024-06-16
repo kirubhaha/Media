@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Feed Application</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .article {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    .remove-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="newsFeedPage">
+    <h1>News Feed</h1>
+    <button onclick="showEditPage()">Edit News Feed</button>
+    <div id="newsFeed"></div>
+  </div>
+
+  <div id="editPage" class="hidden">
+    <h1>Edit News Feed</h1>
+    <input id="title" type="text" placeholder="Title">
+    <textarea id="content" placeholder="Content"></textarea>
+    <button onclick="addArticle()">Add Article</button>
+    <button onclick="saveArticles()">Save Articles</button>
+    <div id="authorArticles"></div>
+    <button onclick="showNewsFeedPage()">Back to News Feed</button>
+  </div>
+
+  <script>
+    let articles = [];
+
+    document.addEventListener('DOMContentLoaded', loadArticles);
+
+    function loadArticles() {
+      const savedArticles = localStorage.getItem('articles');
+      if (savedArticles) {
+        articles = JSON.parse(savedArticles);
+      } else {
+        articles = [
+          { id: generateId(), title: 'Sample Article 1', content: 'This is the content of the first article.' },
+          { id: generateId(), title: 'Sample Article 2', content: 'This is the content of the second article.' }
+        ];
+      }
+      renderArticlesForUser();
+    }
+
+    function renderArticlesForUser() {
+      const newsFeed = document.getElementById('newsFeed');
+      newsFeed.innerHTML = '';
+      articles.forEach(article => {
+        const articleElement = document.createElement('div');
+        articleElement.className = 'article';
+        articleElement.innerHTML = '<h2>${article.title}</h2><p>${article.content}</p>';
+        newsFeed.appendChild(articleElement);
+      });
+    }
+
+    function renderArticlesForAuthor() {
+      const articlesContainer = document.getElementById('authorArticles');
+      articlesContainer.innerHTML = '';
+      articles.forEach(article => {
+        const articleElement = document.createElement('div');
+        articleElement.className = 'article';
+        articleElement.innerHTML = `
+          <h2>${article.title}</h2>
+          <p>${article.content}</p>
+          <button class="remove-btn" onclick="removeArticle('${article.id}')">Remove</button>
+        `;
+        articlesContainer.appendChild(articleElement);
+      });
+    }
+
+    function addArticle() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const article = { id: generateId(), title, content };
+      articles.push(article);
+      renderArticlesForAuthor();
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+    }
+
+    function removeArticle(id) {
+      articles = articles.filter(article => article.id !== id);
+      renderArticlesForAuthor();
+    }
+
+    function saveArticles() {
+      localStorage.setItem('articles', JSON.stringify(articles));
+      renderArticlesForUser();
+      showNewsFeedPage();
+      alert('Articles saved');
+    }
+
+    function showEditPage() {
+      document.getElementById('newsFeedPage').classList.add('hidden');
+      document.getElementById('editPage').classList.remove('hidden');
+      renderArticlesForAuthor();
+    }
+
+    function showNewsFeedPage() {
+      document.getElementById('editPage').classList.add('hidden');
+      document.getElementById('newsFeedPage').classList.remove('hidden');
+      renderArticlesForUser();
+    }
+
+    function generateId() {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    }
+  </script>
+</body>
+</html>
