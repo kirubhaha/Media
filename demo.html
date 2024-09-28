@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUZZLE</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #ff6347;
+            border-radius: 5%;
+            text-align: center;
+            background-color: aquamarine;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: #98fb98;
+        }
+
+        #timer, #moves {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #2f4f4f;
+        }
+
+        #start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #32cd32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-button:hover {
+            background-color: #228b22;
+        }
+
+        @keyframes highlight {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .highlight-move {
+            animation: highlight 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <button id="start-button">Start Game</button>
+        <div id="timer">Time: 00:00:00</div>
+        <div id="moves">Moves: 0</div>
+        <table id="field" style="border: 1px solid red;">
+        </table>
+    </div>
+
+    <script>
+        var size = 4; // 4x4 puzzle size
+        var fieldCells = createField(); // Create the grid
+        var values, moveCount, startTime, timerInterval, emptyX, emptyY;
+        var LEFT = { dx: -1, dy: 0 }, RIGHT = { dx: 1, dy: 0 }, UP = { dx: 0, dy: -1 }, DOWN = { dx: 0, dy: 1 };
+
+        // Create the 4x4 grid of cells
+        function createField() {
+            var cells = [];
+            var table = document.getElementById('field'); // Get the table element
+
+            for (var y = 0; y < size; y++) {
+                var tr = document.createElement('tr'); // Create a new row
+                table.appendChild(tr); // Append the row to the table
+
+                var rowCells = [];
+                cells.push(rowCells); // Store the row of cells
+
+                for (var x = 0; x < size; x++) {
+                    var td = document.createElement('td'); // Create a new cell
+                    td.setAttribute('class', 'cell'); // Add the 'cell' class for styling
+                    tr.appendChild(td); // Append the cell to the row
+                    rowCells.push(td); // Add the cell to the row's array
+                }
+            }
+            return cells; // Return the grid of cells
+        }
+
+        // Create initial puzzle values (numbers 1 to 15, and 0 for the empty space)
+        function createInitialValues() {
+            emptyX = emptyY = size - 1; // The last cell (bottom-right) is empty
+            var v = [];
+            var i = 1; // Start with 1
+
+            for (var y = 0; y < size; y++) {
+                var rowValues = [];
+                v.push(rowValues);
+                for (var x = 0; x < size; x++) {
+                    rowValues.push(i); // Add numbers 1 to 15
+                    i++;
+                }
+            }
+            v[emptyY][emptyX] = 0; // Set the last cell as 0 (empty space)
+            return v; // Return the puzzle values
+        }
+
+        // Draw the puzzle values in the grid
+        function draw() {
+            for (var y = 0; y < size; y++) {
+                for (var x = 0; x < size; x++) {
+                    var v = values[y][x]; // Get the value at this position
+                    var td = fieldCells[y][x]; // Get the corresponding cell in the grid
+                    td.innerHTML = v == 0 ? '' : String(v); // Display the number (empty for 0)
+                }
+            }
+        }
+
+        // Move the tiles based on direction
+        function makeMove(move) {
+    var newX = emptyX + move.dx, newY = emptyY + move.dy;
+    if (newX >= size || newX < 0 || newY >= size || newY < 0) {
+        return false; // Move out of bounds
+    }
+    var c = values[newY][newX];
+    values[newY][newX] = 0; // Set new empty space
+    values[emptyY][emptyX] = c; // Swap with previous empty space
+    emptyX = newX;
+    emptyY = newY;
+    moveCount++; // Increment move count
+    document.getElementById('moves').innerHTML = "Moves: " + moveCount; // Update the move display
+    return true;
+}
+        // Shuffle the puzzle by making random moves
+        function shuffle() {
+    var options = [LEFT, RIGHT, UP, DOWN];
+    var iterations = 100; // Increased shuffle iterations for better randomization
+    for (var i = 0; i < iterations; i++) {
+        var move = options[Math.floor(Math.random() * options.length)];
+        var newX = emptyX + move.dx, newY = emptyY + move.dy;
+        if (newX >= size || newX < 0 || newY >= size || newY < 0) {
+            continue; // Skip out of bounds moves
+        }
+        var c = values[newY][newX];
+        values[newY][newX] = 0; // Set new empty space
+        values[emptyY][emptyX] = c; // Swap values
+        emptyX = newX;
+        emptyY = newY;
+    }
+    draw(); // Draw after shuffling
+}
+document.getElementById('start-button').addEventListener('click', function () {
+    init(); // Initialize the game
+    startTimer(); // Start the timer
+});
+
+        // Check if the game is won
+        function gameOver() {
+            var expectedValue = 1;
+            for (var y = 0; y < size; y++) {
+                for (var x = 0; x < size; x++) {
+                    if (y == size - 1 && x == size - 1) { // Last cell should be 0 (empty)
+                        if (values[y][x] != 0) return false;
+                    } else if (values[y][x] != expectedValue) {
+                        return false;
+                    }
+                    expectedValue++;
+                }
+            }
+            return true;
+        }
+
+        // Start the game timer
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(function () {
+                var currentTime = new Date();
+                var timeDiff = currentTime - startTime;
+                var hours = Math.floor(timeDiff / 3600000);
+                var minutes = Math.floor((timeDiff % 3600000) / 60000);
+                var seconds = Math.floor((timeDiff % 60000) / 1000);
+                document.getElementById('timer').innerHTML = "Time: " +
+                    (hours < 10 ? "0" + hours : hours) + ":" +
+                    (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                    (seconds < 10 ? "0" + seconds : seconds);
+            }, 1000);
+        }
+
+        // Stop the timer
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Listen for key presses to move the puzzle
+        document.addEventListener('keydown', function (e) {
+            switch (e.keyCode) {
+                case 38: if (makeMove(UP)) highlightMove(); break;    // Arrow Up
+                case 40: if (makeMove(DOWN)) highlightMove(); break;  // Arrow Down
+                case 37: if (makeMove(LEFT)) highlightMove(); break;  // Arrow Left
+                case 39: if (makeMove(RIGHT)) highlightMove(); break; // Arrow Right
+            }
+            draw(); // Redraw the puzzle after making a move
+            if (gameOver()) {
+                stopTimer(); // Stop timer on game over
+                setTimeout(function () {
+                    alert('Game over, you won! Moves: ' + moveCount + ', Time: ' + document.getElementById('timer').innerHTML.split("Time: ")[1]);
+                    init(); // Reinitialize after winning
+                }, 100);
+            }
+        });
+
+        // Highlight the moved cell for a brief moment
+        function highlightMove() {
+            var movedCell = fieldCells[emptyY][emptyX]; // Get the empty cell after the move
+            movedCell.classList.add('highlight-move');
+            setTimeout(function () {
+                movedCell.classList.remove('highlight-move');
+            }, 500);
+        }
+
+        function init() {
+    values = createInitialValues(); // Initialize values
+    shuffle(); // Shuffle the puzzle first
+    moveCount = 0; // Reset move count AFTER shuffling
+    document.getElementById('moves').innerHTML = "Moves: 0"; // Update moves to 0
+    stopTimer(); // Stop any existing timer
+    document.getElementById('timer').innerHTML = "Time: 00:00:00"; // Reset timer display
+}
+        // Start button event listener
+        document.getElementById('start-button').addEventListener('click', function () {
+            init(); // Initialize the game
+            startTimer(); // Start the timer
+        });
+    </script>
+
+</body>
+</html>
