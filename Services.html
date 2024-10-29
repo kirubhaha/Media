@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+</head>
+<body>
+  <div>
+    <div class="py-4">
+      <div class="px-14 py-6">
+        <table class="w-full border-collapse border-spacing-0">
+          <tbody>
+            <tr>
+              <td class="w-full align-top">
+                <div>
+                  <img src="PAR Logo.png" class="h-12"/>
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="text-sm">
+                  <table class="border-collapse border-spacing-0">
+                    <tbody>
+                      <tr>                
+                        <td class="border-r pr-4">
+                          <div>
+                            <p class="whitespace-nowrap text-slate-400 text-right">Sample Given Date</p>
+                            <p class="whitespace-nowrap font-bold text-main text-right">{{ Date }}</p>
+                          </div>
+                        </td>
+                        <td class="pl-4">
+                          <div>
+                            <p class="whitespace-nowrap text-slate-400 text-right">Report Generated Date</p>
+                            <p class="whitespace-nowrap font-bold text-main text-right">{{ todayDate }}</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-slate-100 px-14 py-6 text-sm">
+        <table class="w-full border-collapse border-spacing-0">
+          <tbody>
+            <tr>
+              <td class="w-1/2 align-top">
+                <div class="text-sm text-neutral-600">
+                  <p class="font-bold">{{CName}}</p>
+                  <p>{{CPhno}}</p>
+                  <p>{{CEmail}}</p>
+                  <p>{{CAddress}}</p>
+                  <p>{{CDistrict}}</p>
+                  <p>{{CState}}</p>
+                  <p>India </p>
+                </div>
+              </td>
+              <td class="w-1/2 align-top text-right">
+                <div class="text-sm text-neutral-600">
+                  <p class="font-bold">{{ Name }}</p>
+                  <p>{{ Age }}</p>
+                  <p>{{ Gender }}</p>
+                  <p>{{ MobileNo }}</p>
+                  <p>{{ Email }}</p>
+                  <p>{{ Address }}</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="px-14 py-10 text-sm text-neutral-700">
+        <table class="w-full border-collapse border-spacing-0">
+          <thead>
+            <tr>
+              <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">Sno</td>
+              <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Samples</td>
+              <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Tests</td>
+              <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Results</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sample in samples %}
+            <tr class="no-page-break">
+              <td class="border-b py-3 pl-3" rowspan="{{ sample.tests_and_results|length }}">{{ sample.sno }}.</td>
+              <td class="border-b py-3 pl-2" rowspan="{{ sample.tests_and_results|length }}">{{ sample.name }}</td>
+              {% for tr in sample.tests_and_results %}
+              <td class="border-b py-3 pl-2">{{ tr.test }}</td>
+              <td class="border-b py-3 pl-2 text-right">{{ tr.result }}</td>
+            </tr>
+            <tr class="no-page-break">
+              {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="px-14 text-sm text-neutral-700">
+        <p class="text-main font-bold">APPROVAL STATUS</p>
+        <p>{{ Status }}</p>
+      </div>
+
+      <div class="px-14 py-10 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold">Declaration</p>
+        <p class="italic">We declare that this invoice shows that all 
+          particulars are true and correct.  
+          We assure you that we will do our best services at all times.</p>
+        </div>
+
+        <footer class="fixed bottom-0 left-0 bg-slate-100 w-full text-neutral-600 text-center text-xs py-3">
+          {{CName}}
+          <span class="text-slate-300 px-2">|</span>
+          {{CEmail}}
+          <span class="text-slate-300 px-2">|</span>
+          {{CPhno}}
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

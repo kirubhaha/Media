@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+</head>
+<body>
+  <div>
+    <div class="py-4">
+      <div class="px-14 py-6">
+        <table class="w-full border-collapse border-spacing-0">
+          <tbody>
+            <tr>
+              <td class="w-full align-top">
+                <div>
+                  <img src="PAR Logo.png" class="h-12"/>
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="text-sm">
+                  <table class="border-collapse border-spacing-0">
+                    <tbody>
+                      <tr>                
+                        <td class="border-r pr-4">
+                          <div>
+                            <p class="whitespace-nowrap text-slate-400 text-right">Sample Given Date</p>
+                            <p class="whitespace-nowrap font-bold text-main text-right">{{ Date }}</p>
+                          </div>
+                        </td>
+                        <td class="pl-4">
+                          <div>
+                            <p class="whitespace-nowrap text-slate-400 text-right">Report Generated Date</p>
+                            <p class="whitespace-nowrap font-bold text-main text-right">{{ todayDate }}</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-slate-100 px-14 py-6 text-sm">
+        <table class="w-full border-collapse border-spacing-0">
+          <tbody>
+            <tr>
+              <td class="w-1/2 align-top">
+                <div class="text-sm text-neutral-600">
+                  <p class="font-bold">{{CName}}</p>
+                  <p>{{CPhno}}</p>
+                  <p>{{CEmail}}</p>
+                  <p>{{CAddress}}</p>
+                  <p>{{CDistrict}}</p>
+                  <p>{{CState}}</p>
+                  <p>India </p>
+                </div>
+              </td>
+              <td class="w-1/2 align-top text-right">
+                <div class="text-sm text-neutral-600">
+                  <p class="font-bold">{{ Name }}</p>
+                  <p>{{ Age }}</p>
+                  <p>{{ Gender }}</p>
+                  <p>{{ MobileNo }}</p>
+                  <p>{{ Email }}</p>
+                  <p>{{ Address }}</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="px-14 py-4 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold">SAMPLE DETAILS</p><br>
+        <p>Name : {{ SName }}</p>
+        <p>Quantity : {{ SQuan }}</p>
+        <p>Label : {{ SLabel }}</p>
+      </div>
+
+      <div class="px-14 py-4 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold">METHOD USED</p><br>
+        <p class="font-bold">a. Extraction of Total Genomic DNA</p>
+        <p class="px-2 no-page-brea">The total genomic DNA was extracted from the given sample using CTAB/NaCl, Phenol
+Chloroform method standardised by PAR Life Sciences and Research Pvt Ltd, Trichy.
+Quality of the genomic DNA was assessed using 0.7 % agarose gel along. The quantity of the
+genomic DNA was assessed in UV-Vis Spectrometer (Labman). Quality of the DNA was
+good enough to proceed to PCR.</p><br>
+        <p class="font-bold">b. RBCL gene amplification</p>
+        <p class="px-2 no-page-brea">Amplification of matK gene was carried out for the samples using universal primers and
+himedia 2X master mix (forward primer: ACCCAGTCCATCTGGAAATCTTGGTTC Reverse primer: CGTACAGTACTTTTGTGTTTACGAG) with standard reaction volume. With following PCR condition
+intial denaturation with 95°C for 5 min followed by 40 cycles of 94°C for 30 sec, 56°C for 40
+sec as annealing temperature and 72°C for 30 sec as cyclic extension followed by 10 min of
+72°C as final extension in Himedia Insta96plus thermal cycler. Amplion size ~ 900bp (fig 1)
+was observed in all the samples (Fig. 2). PCR-generated amplicon were purified using
+GeneJET PCR purification kit (Thermo Scientific, EU-Lithuania) to remove the primer dimer
+and other carryover contaminations. The quality of the product was assessed using 1.8%
+agarose gel along with 100bp DNA ladder as size standard and the product was found to be
+good for sequencing.</p>
+      </div>
+      
+      <div class="px-14 py-4 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold">PCR Product</p><br>
+        <img src="data:image/png;base64,{{ image1 }}" alt="Image 1" width="300"/>
+        <img src="data:image/png;base64,{{ image2 }}" alt="Image 2" width="300"/>
+      </div>  
+      <br><br>
+      <div class="px-14 py-4 text-sm text-neutral-700">
+        <p class="text-main font-bold no-page-break">SEQUENCE DATA</p>
+        <p class="no-page-break">{{ Data }}</p>
+      </div>
+      
+      <div class="px-14 py-4 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold no-page-break">RESULTS/REMARKS</p><br>
+        <p>{{ Result }} quality sequences were obtained (raw data shared by email). The sequences were not
+used for editing/analysis due to the single sample submitted and more than one sample is
+required to avoid any errors during editing. Raw Ab1 and FASTA sequences were reported
+earlier for confirmation.</p>
+      </div>
+      
+      <div class="px-14 py-10 text-sm text-neutral-700">
+        <table class="w-full border-collapse border-spacing-0 no-page-break">
+          <thead>
+            <tr class="no-page-break">
+              <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">Sno</td>
+              <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Name of the Sample</td>
+              <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Scientific name</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">1.</td>
+                <td class="border-b py-3 pl-2">BG</td>
+                <td class="border-b py-3 pl-2">Lagenaria siceraria</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">2.</td>
+                <td class="border-b py-3 pl-2">Cr</td>
+                <td class="border-b py-3 pl-2">Coriandrum sativum</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">3.</td>
+                <td class="border-b py-3 pl-2">Ck</td>
+                <td class="border-b py-3 pl-2">Vigna unguiculata</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">4.</td>
+                <td class="border-b py-3 pl-2">CC</td>
+                <td class="border-b py-3 pl-2">Cucumis sativus</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">5.</td>
+                <td class="border-b py-3 pl-2">Md</td>
+                <td class="border-b py-3 pl-2">Brassica napus</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">6.</td>
+                <td class="border-b py-3 pl-2">Ov</td>
+                <td class="border-b py-3 pl-2">Abelmoschus esculentus</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">7.</td>
+                <td class="border-b py-3 pl-2">O1</td>
+                <td class="border-b py-3 pl-2">Abelmoschus esculentus</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">8.</td>
+                <td class="border-b py-3 pl-2">PK</td>
+                <td class="border-b py-3 pl-2">Spinacia tetrandra</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">9.</td>
+                <td class="border-b py-3 pl-2">PN</td>
+                <td class="border-b py-3 pl-2">Pisum sativum</td>
+            </tr>
+            <tr class="no-page-break">
+                <td class="border-b py-3 pl-3">10.</td>
+                <td class="border-b py-3 pl-2">RA</td>
+                <td class="border-b py-3 pl-2">Raphanus sativus</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="px-14 py-10 text-sm text-neutral-700 no-page-break">
+        <p class="text-main font-bold">Declaration</p>
+        <p class="italic">We declare that this invoice shows that all 
+          particulars are true and correct.  
+          We assure you that we will do our best services at all times.</p>
+        </div>
+
+        <footer class="fixed bottom-0 left-0 bg-slate-100 w-full text-neutral-600 text-center text-xs py-3">
+          {{CName}}
+          <span class="text-slate-300 px-2">|</span>
+          {{CEmail}}
+          <span class="text-slate-300 px-2">|</span>
+          {{CPhno}}
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
